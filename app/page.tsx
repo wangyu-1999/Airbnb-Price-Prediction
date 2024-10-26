@@ -127,6 +127,14 @@ export default function Home() {
       return;
     }
 
+    // Minimum Nights and Maximum Nights validation
+    if (parseInt(minimumNights) > parseInt(maximumNights)) {
+      setShowAlert(true);
+      setAlertMessage('Minimum Nights should be less than or equal to Maximum Nights');
+      setTimeout(() => setShowAlert(false), 3000);
+      return;
+    }
+
     setIsLoading(true);
     setPrice(null);
     setNeighbourhoods([]);
