@@ -49,11 +49,19 @@ export default function Home() {
   }, [])
 
   // Arrays for dropdown options
-  const propertyTypes = [
-    'Apartment', 'House', 'Townhouse', 'Condominium', 'Villa', 'Cabin',
-    'Treehouse', 'Houseboat', 'Camper/RV', 'Tent', 'Hotel room',
-    'Bed and Breakfast', 'Loft', 'Farmhouse', 'Castle'
-  ];
+  const propertyTypes = ['Entire guest suite', 'Entire condo', 'Entire rental unit',
+    'Private room in home', 'Private room in rental unit',
+    'Private room in townhouse', 'Private room in condo', 'Entire home',
+    'Entire townhouse', 'Entire loft', 'Private room in bed and breakfast',
+    'Shared room in home', 'Entire guesthouse', 'Entire serviced apartment',
+    'Private room in guest suite', 'Private room', 'Private room in bungalow',
+    'Private room in loft', 'Entire place', 'Private room in guesthouse',
+    'Room in boutique hotel', 'Shared room in townhouse',
+    'Private room in serviced apartment', 'Shared room in boutique hotel',
+    'Private room in casa particular', 'Boat', 'Shared room in condo',
+    'Private room in vacation home', 'Shared room in vacation home',
+    'Room in aparthotel', 'Entire vacation home', 'Shared room in rental unit',
+    'Private room in villa']
 
   const roomTypes = [
     'Entire home/apt', 'Private room', 'Shared room', 'Hotel room'
