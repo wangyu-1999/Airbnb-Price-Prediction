@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { Map, AdvancedMarker, MapMouseEvent, APIProvider, Pin } from '@vis.gl/react-google-maps';
+import { Map, AdvancedMarker, MapMouseEvent, APIProvider } from '@vis.gl/react-google-maps';
 import RootLayout from './layout';
+import Nav from '@/components/Nav';
 
 export default function Home() {
   // State variables for managing UI and data
@@ -301,7 +302,7 @@ export default function Home() {
     <RootLayout>
       <main className="flex min-h-screen flex-col items-center p-6 bg-gray-50">
         {/* Header section */}
-        <header className="w-full flex justify-between items-center mb-8">
+        <header className="w-full flex justify-between items-center mb-8 h-12">
           <h1 className="text-3xl font-bold text-blue-600">Airbnb Price Prediction</h1>
           <div className="flex items-center">
             <input
@@ -312,7 +313,7 @@ export default function Home() {
             />
           </div>
         </header>
-
+        <Nav />
         {/* Alert message */}
         {showAlert && (
           <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg">

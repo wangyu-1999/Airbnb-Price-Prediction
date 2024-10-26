@@ -1,0 +1,30 @@
+export interface AirbnbData {
+    host_response_time: string;
+    host_response_rate: string;
+    host_acceptance_rate: string;
+    host_is_superhost: string;
+    host_neighbourhood: string;
+    host_identity_verified: string;
+    latitude: string;
+    longitude: string;
+    property_type: string;
+    room_type: string;
+    accommodates: string;
+    bathrooms: string;
+    bedrooms: string;
+    beds: string;
+    minimum_nights: string;
+    maximum_nights: string;
+    number_of_reviews_ltm: string;
+    number_of_reviews_l30d: string;
+    review_scores_rating: string;
+    review_scores_accuracy: string;
+    review_scores_cleanliness: string;
+    review_scores_checkin: string;
+    review_scores_communication: string;
+    review_scores_location: string;
+    review_scores_value: string;
+    license: string;
+    instant_bookable: string;
+    price: string;
+}
