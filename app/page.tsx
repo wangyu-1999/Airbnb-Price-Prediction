@@ -58,13 +58,7 @@ export default function Home() {
     'Entire home/apt', 'Private room', 'Shared room', 'Hotel room'
   ];
 
-  const hostResponseTimes = [
-    'within an hour',
-    'within a few hours',
-    'within a day',
-    'within a few days',
-    'a week or more'
-  ];
+  const hostResponseTimes = ["Fast", "Moderate", "Slow"];
 
   // Function to handle price calculation
   const handleSearch = async () => {
