@@ -24,6 +24,7 @@ export default function Home() {
   const [apiKey, setApiKey] = useState<string>('')
   const [mapId, setMapId] = useState<string>('')
   const [hostIdentityVerified, setHostIdentityVerified] = useState(false);
+  const [superhost, setSuperhost] = useState(false);
   const [accommodates, setAccommodates] = useState('');
   const [bathrooms, setBathrooms] = useState('');
   const [bedrooms, setBedrooms] = useState('');
@@ -100,7 +101,8 @@ export default function Home() {
           hostResponseRate: hostResponseRate / 100,
           hostAcceptanceRate: hostAcceptanceRate / 100,
           hostNeighbourhood,
-          hostIdentityVerified: hostIdentityVerified ? 1 : 0,
+          hostIdentityVerified: hostIdentityVerified,
+          superhost: superhost,
           accommodates: parseInt(accommodates),
           bathrooms: parseFloat(bathrooms),
           bedrooms: parseInt(bedrooms),
@@ -485,6 +487,17 @@ export default function Home() {
                       className="mr-2"
                     />
                     Host Identity Verified
+                  </label>
+                </div>
+                <div className="col-span-2">
+                  <label className="flex items-center text-sm font-medium text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={superhost}
+                      onChange={(e) => setSuperhost(e.target.checked)}
+                      className="mr-2"
+                    />
+                    Superhost
                   </label>
                 </div>
                 <div>
