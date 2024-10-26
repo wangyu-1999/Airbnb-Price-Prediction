@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { Map, AdvancedMarker, MapMouseEvent, APIProvider } from '@vis.gl/react-google-maps';
+import { Map, AdvancedMarker, MapMouseEvent, APIProvider, Pin } from '@vis.gl/react-google-maps';
 import RootLayout from './layout';
 
 export default function Home() {
@@ -38,6 +38,14 @@ export default function Home() {
   const [reviewScoresCommunication, setReviewScoresCommunication] = useState(2.5);
   const [reviewScoresLocation, setReviewScoresLocation] = useState(2.5);
   const [reviewScoresValue, setReviewScoresValue] = useState(2.5);
+  const [neighbourhoods, setNeighbourhoods] = useState<[number, number][]>([]);
+  const [neighbourhoodsLatLng, setNeighbourhoodsLatLng] = useState<{ lat: number, lng: number }[]>([]);
+  useEffect(() => {
+    const convertToLatLng = (coordinates: [number, number][]) => {
+      return coordinates.map(([lng, lat]) => ({ lat, lng }));
+    };
+    setNeighbourhoodsLatLng(convertToLatLng(neighbourhoods));
+  }, [neighbourhoods]);
   useEffect(() => {
     fetch('/api/maps-api-key')
       .then(response => response.json())
@@ -92,6 +100,7 @@ export default function Home() {
 
     setIsLoading(true);
     setPrice(null);
+    setNeighbourhoods([]);
 
     // API call to get price prediction
     try {
@@ -135,6 +144,10 @@ export default function Home() {
       console.log('Success:', data);
       if (typeof data.price === 'number') {
         setPrice(data.price);
+      }
+      // Update neighbourhoods from the response
+      if (Array.isArray(data.neighbours)) {
+        setNeighbourhoods(data.neighbours);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -331,6 +344,17 @@ export default function Home() {
                 {selectedLocation && (
                   <AdvancedMarker position={selectedLocation} />
                 )}
+                {neighbourhoodsLatLng.map((position, index) => (
+                  <AdvancedMarker
+                    key={index}
+                    position={position}
+                  >    <Pin
+                      background={'#4285F4'}
+                      borderColor={'#3367D6'}
+                      glyphColor={'#FFFFFF'}
+                      scale={0.4}
+                    /></AdvancedMarker>
+                ))}
               </Map>
             </div>
           </APIProvider>
