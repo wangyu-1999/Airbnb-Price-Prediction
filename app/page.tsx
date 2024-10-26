@@ -77,6 +77,27 @@ export default function Home() {
 
   const hostResponseTimes = ["Fast", "Moderate", "Slow"];
 
+  const neighbourhoodOptions = ['Roxbury', 'Beacon Hill', 'Dorchester', 'Charlestown', 'Jamaica Plain',
+    'North End', 'South Boston', 'Back Bay', 'Roslindale', 'Downtown Crossing',
+    'South End', 'Government Center', 'West End', 'Allston-Brighton',
+    'Fenway/Kenmore', 'Hyde Park', 'West Roxbury', 'East Boston', 'Mattapan',
+    'Leather District', 'Mission Hill', 'Chinatown', 'Theater District',
+    'Cape Neddick', 'Cambridge', 'Downtown', 'Chestnut Hill', 'Back Bay West',
+    'Brighton', 'Harwich Port', 'Spring Hill', 'Brookline', 'East Downtown',
+    'Lower Allston', 'Prudential / St. Botolph', 'D Street / West Broadway',
+    'Bay Village', 'Boston Theater District', 'Eagle Hill', 'Jeffries Point',
+    'Fenway–Kenmore', 'Allston', 'Stony Brook / Cleary Square',
+    'Columbus Park / Andrew Square', 'Codman Square', 'Central City',
+    "St. Elizabeth's", 'Harvard Square', 'Franklin Field South', 'Brewster',
+    'City Point', 'Cedar Grove', 'West Fens', 'Fisher Hill', 'Rockport',
+    'East Falmouth', 'Orient Heights', 'Franklin Field North', 'Ward Two',
+    'Southern Mattapan', 'Metropolitan Hill / Beech Street',
+    'Harbor View / Orient Heights', 'Sun Bay South', 'Newton', 'Wellington Hill',
+    'Brook Farm', 'South Sanford', 'Dorchester Center', 'Commonwealth',
+    'Medford Street / The Neck', 'West Street / River Street',
+    'Lower Washington / Mount Hope', 'South Medford', 'Vineyard Haven',
+    'Fairmount Hill', 'South Beach', 'Uplands'];
+
   // Function to handle price calculation
   const handleSearch = async () => {
     // Rate limiting check
@@ -94,6 +115,14 @@ export default function Home() {
     if (!serverAddress) {
       setShowAlert(true);
       setAlertMessage('Please enter server address');
+      setTimeout(() => setShowAlert(false), 3000);
+      return;
+    }
+
+    // Host Neighbourhood validation
+    if (!hostNeighbourhood) {
+      setShowAlert(true);
+      setAlertMessage('Please select host neighbourhood');
       setTimeout(() => setShowAlert(false), 3000);
       return;
     }
@@ -291,10 +320,17 @@ export default function Home() {
               <h2 className="text-2xl font-bold mb-4">Input Parameters</h2>
               <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <label className="block text-lg font-medium text-gray-700 mb-1">Location</label>
-                  <p className="text-gray-600">
-                    {selectedLocation ? <span className="text-green-500">Location selected</span> : <span className="text-red-500">Please select a location on the map</span>}
-                  </p>
+                  <label className="block text-base font-medium text-gray-700 mb-[6px]">Host Neighbourhood</label>
+                  <select
+                    value={hostNeighbourhood}
+                    onChange={(e) => setHostNeighbourhood(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white"
+                  >
+                    <option value="">Select host neighbourhood</option>
+                    {neighbourhoodOptions.map((neighbourhood) => (
+                      <option key={neighbourhood} value={neighbourhood}>{neighbourhood}</option>
+                    ))}
+                  </select>
                 </div>
                 <button
                   onClick={openModal}
@@ -309,16 +345,16 @@ export default function Home() {
           {/* Prediction result section */}
           <div className="w-full md:w-1/2">
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-2xl font-bold mb-5">Estimated Price</h2>
+              <h2 className="text-2xl font-bold">Estimated Price</h2>
               <div className="text-center">
-                <p className="text-5xl font-bold text-blue-600 mb-5">
+                <p className="text-5xl font-bold text-blue-600 mt-8 mb-8">
                   {isLoading ? 'Calculating...' : (price !== null ? `$${price.toFixed(2)}` : '???')}
                 </p>
               </div>
               <button
                 onClick={handleSearch}
-                disabled={isLoading || !selectedLocation || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews}
-                className={`w-full mt-4 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${(isLoading || !selectedLocation || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isLoading || !hostNeighbourhood || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews}
+                className={`w-full mt-4 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${(isLoading || !hostNeighbourhood || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews) ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {isLoading ? 'Calculating...' : 'Calculate Price'}
               </button>
@@ -341,19 +377,14 @@ export default function Home() {
                 defaultCenter={{ lat: 42.3601, lng: -71.0589 }}
                 onClick={handleMapClick}
               >
-                {selectedLocation && (
+                {/* {selectedLocation && (
                   <AdvancedMarker position={selectedLocation} />
-                )}
+                )} */}
                 {neighbourhoodsLatLng.map((position, index) => (
                   <AdvancedMarker
                     key={index}
                     position={position}
-                  >    <Pin
-                      background={'#4285F4'}
-                      borderColor={'#3367D6'}
-                      glyphColor={'#FFFFFF'}
-                      scale={0.4}
-                    /></AdvancedMarker>
+                  />
                 ))}
               </Map>
             </div>
@@ -473,16 +504,6 @@ export default function Home() {
                       <option key={time} value={time}>{time}</option>
                     ))}
                   </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Host Neighbourhood</label>
-                  <input
-                    type="text"
-                    value={hostNeighbourhood}
-                    onChange={(e) => setHostNeighbourhood(e.target.value)}
-                    placeholder="Enter host neighbourhood"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
                 </div>
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
