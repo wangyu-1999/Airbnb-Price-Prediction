@@ -50,7 +50,7 @@ export default function Home() {
 
   useEffect(() => {
     const convertToLatLng = (coordinates: [number, number][]) => {
-      return coordinates.map(([lng, lat]) => ({ lat, lng }));
+      return coordinates.map(([lat, lng]) => ({ lat, lng }));
     };
     setNeighbourhoodsLatLng(convertToLatLng(neighbourhoods));
   }, [neighbourhoods]);

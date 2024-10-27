@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { APIProvider, Map, AdvancedMarker, MapMouseEvent } from '@vis.gl/react-google-maps';
 
