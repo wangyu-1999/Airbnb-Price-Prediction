@@ -7,6 +7,7 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import { propertyTypes, roomTypes, hostResponseTimes, neighbourhoodOptions } from './constants';
 import MapComponent from '@/components/MapComponent';
+import Header from '@/components/Header';
 
 export default function Home() {
   // State variables for managing UI and data
@@ -291,17 +292,19 @@ export default function Home() {
       <main className="flex min-h-screen flex-col items-center p-6 bg-gray-50">
         {/* Header section */}
         <Nav />
-        <header className="w-full flex justify-between items-center mb-10">
+        {/* <header className="w-full flex justify-between items-center mb-10">
           <div className="flex flex-col md:flex-row items-center w-full justify-between">
             <h1 className="text-4xl font-bold text-gray-900 mb-4 md:mb-0">Airbnb Price Prediction</h1>
-            {/* <input
+            <input
               placeholder="Enter server address..."
               value={serverAddress}
               onChange={(e) => setServerAddress(e.target.value)}
               className="w-full md:w-auto px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-[36px] flex items-center shadow-sm"
-            /> */}
+            />
           </div>
-        </header>
+        </header> */}
+        <Header />
+        <p className="text-sm text-gray-500 mb-4">Note: The first request may take longer as the free server wakes up from sleep mode. Subsequent requests will be faster.</p>
         {/* Alert message */}
         {showAlert && (
           <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">

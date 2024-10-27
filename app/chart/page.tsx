@@ -11,6 +11,7 @@ import CorrelationHeatmap from './components/CorrelationHeatmap'
 import { AirbnbData } from './types'
 import airbnbData from '@/public/Airbnb_Final_Data.json'
 import Footer from '@/components/Footer'
+import Header from '@/components/Header'
 
 export default function Chart() {
     const data = airbnbData as AirbnbData[]
@@ -20,9 +21,7 @@ export default function Chart() {
             <main className="flex min-h-screen flex-col items-center p-6 bg-gray-50">
                 <Nav />
                 {/* Header section */}
-                <header className="w-full flex justify-between items-center mb-10">
-                    <h1 className="text-4xl font-bold text-gray-900">Airbnb Price Prediction</h1>
-                </header>
+                <Header />
                 <div className="w-full max-w-4xl">
                     <div className="bg-white p-8 rounded-2xl shadow-lg mb-8">
                         <h2 className="text-2xl font-semibold text-gray-900 mb-6">Data Sample</h2>

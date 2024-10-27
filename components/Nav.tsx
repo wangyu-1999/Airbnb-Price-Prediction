@@ -12,7 +12,12 @@ export default function Nav() {
                     </li>
                     <li>
                         <Link href="/chart" className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium text-sm">
-                            Chart
+                            Charts
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/locations" className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium text-sm">
+                            Locations
                         </Link>
                     </li>
                 </ul>
