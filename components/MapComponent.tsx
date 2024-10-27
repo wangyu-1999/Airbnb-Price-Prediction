@@ -6,7 +6,7 @@ interface MapComponentProps {
     apiKey: string;
     mapId: string;
     selectedLocation: google.maps.LatLngLiteral | null;
-    neighbourhoodsLatLng: { lat: number; lng: number }[];
+    selectedNeighbourhood: google.maps.LatLngLiteral | null;
     handleMapClick: (e: MapMouseEvent) => void;
 }
 
@@ -14,7 +14,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     apiKey,
     mapId,
     selectedLocation,
-    neighbourhoodsLatLng,
+    selectedNeighbourhood,
     handleMapClick,
 }) => {
     return (
@@ -34,12 +34,9 @@ const MapComponent: React.FC<MapComponentProps> = ({
                         {/* {selectedLocation && (
                             <AdvancedMarker position={selectedLocation} />
                         )} */}
-                        {neighbourhoodsLatLng.map((position, index) => (
-                            <AdvancedMarker
-                                key={index}
-                                position={position}
-                            />
-                        ))}
+                        {selectedNeighbourhood && (
+                            <AdvancedMarker position={selectedNeighbourhood} />
+                        )}
                     </Map>
                 </APIProvider>
             ) : (

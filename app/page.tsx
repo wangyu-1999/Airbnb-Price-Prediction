@@ -5,7 +5,7 @@ import { MapMouseEvent } from '@vis.gl/react-google-maps';
 import RootLayout from './layout';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
-import { propertyTypes, roomTypes, hostResponseTimes, neighbourhoodOptions } from './constants';
+import { propertyTypes, roomTypes, hostResponseTimes, neighbourhoodOptions, neighbourhoodCoordinates } from './constants';
 import MapComponent from '@/components/MapComponent';
 import Header from '@/components/Header';
 
@@ -43,18 +43,24 @@ export default function Home() {
   const [reviewScoresCommunication, setReviewScoresCommunication] = useState(2.5);
   const [reviewScoresLocation, setReviewScoresLocation] = useState(2.5);
   const [reviewScoresValue, setReviewScoresValue] = useState(2.5);
-  const [neighbourhoods, setNeighbourhoods] = useState<[number, number][]>([]);
-  const [neighbourhoodsLatLng, setNeighbourhoodsLatLng] = useState<{ lat: number, lng: number }[]>([]);
   const [numberOfReviewsL30d, setNumberOfReviewsL30d] = useState('');
   const [instantBookable, setInstantBookable] = useState(false);
   const [havingLicense, setHavingLicense] = useState(false);
+  const [selectedNeighborhoodCoords, setSelectedNeighborhoodCoords] = useState<google.maps.LatLngLiteral | null>(null);
 
+  // Update selectedNeighborhoodCoords when hostNeighbourhood changes
   useEffect(() => {
-    const convertToLatLng = (coordinates: [number, number][]) => {
-      return coordinates.map(([lat, lng]) => ({ lat, lng }));
-    };
-    setNeighbourhoodsLatLng(convertToLatLng(neighbourhoods));
-  }, [neighbourhoods]);
+    if (hostNeighbourhood && neighbourhoodCoordinates[hostNeighbourhood]) {
+      const coords = neighbourhoodCoordinates[hostNeighbourhood];
+      setSelectedNeighborhoodCoords({
+        lat: coords.lat,
+        lng: coords.lng
+      });
+    } else {
+      setSelectedNeighborhoodCoords(null);
+    }
+  }, [hostNeighbourhood]);
+
   useEffect(() => {
     fetch('/api/maps-api-key')
       .then(response => response.json())
@@ -113,7 +119,6 @@ export default function Home() {
 
     setIsLoading(true);
     setPrice(null);
-    setNeighbourhoods([]);
 
     // API call to get price prediction
     try {
@@ -159,10 +164,6 @@ export default function Home() {
       console.log('Success:', data);
       if (typeof data.price === 'number') {
         setPrice(data.price);
-      }
-      // Update neighbourhoods from the response
-      if (Array.isArray(data.neighbours)) {
-        setNeighbourhoods(data.neighbours);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -367,7 +368,7 @@ export default function Home() {
           apiKey={apiKey}
           mapId={mapId}
           selectedLocation={selectedLocation}
-          neighbourhoodsLatLng={neighbourhoodsLatLng}
+          selectedNeighbourhood={selectedNeighborhoodCoords}
           handleMapClick={handleMapClick}
         />
 
