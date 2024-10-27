@@ -2,16 +2,16 @@ import Link from 'next/link';
 
 export default function Nav() {
     return (
-        <nav className="w-full bg-blue-600 p-4 mb-8 rounded-lg shadow-md">
+        <nav className="w-full bg-white bg-opacity-70 backdrop-blur-md p-4 mb-4 rounded-2xl shadow-sm">
             <div className="container mx-auto flex justify-between items-center">
-                <ul className="flex space-x-4">
+                <ul className="flex space-x-6">
                     <li>
-                        <Link href="/" className="text-white hover:text-blue-200 hover:underline">
+                        <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium text-sm">
                             Prediction
                         </Link>
                     </li>
                     <li>
-                        <Link href="/chart" className="text-white hover:text-blue-200 hover:underline">
+                        <Link href="/chart" className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium text-sm">
                             Chart
                         </Link>
                     </li>

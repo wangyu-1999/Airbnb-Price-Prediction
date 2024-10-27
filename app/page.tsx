@@ -1,9 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { Map, AdvancedMarker, MapMouseEvent, APIProvider } from '@vis.gl/react-google-maps';
+import { MapMouseEvent } from '@vis.gl/react-google-maps';
 import RootLayout from './layout';
 import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
+import { propertyTypes, roomTypes, hostResponseTimes, neighbourhoodOptions } from './constants';
+import MapComponent from '@/components/MapComponent';
 
 export default function Home() {
   // State variables for managing UI and data
@@ -56,48 +59,6 @@ export default function Home() {
       })
       .catch(error => console.error('Error fetching API key:', error))
   }, [])
-
-  // Arrays for dropdown options
-  const propertyTypes = ['Entire guest suite', 'Entire condo', 'Entire rental unit',
-    'Private room in home', 'Private room in rental unit',
-    'Private room in townhouse', 'Private room in condo', 'Entire home',
-    'Entire townhouse', 'Entire loft', 'Private room in bed and breakfast',
-    'Shared room in home', 'Entire guesthouse', 'Entire serviced apartment',
-    'Private room in guest suite', 'Private room', 'Private room in bungalow',
-    'Private room in loft', 'Entire place', 'Private room in guesthouse',
-    'Room in boutique hotel', 'Shared room in townhouse',
-    'Private room in serviced apartment', 'Shared room in boutique hotel',
-    'Private room in casa particular', 'Boat', 'Shared room in condo',
-    'Private room in vacation home', 'Shared room in vacation home',
-    'Room in aparthotel', 'Entire vacation home', 'Shared room in rental unit',
-    'Private room in villa']
-
-  const roomTypes = [
-    'Entire home/apt', 'Private room', 'Shared room', 'Hotel room'
-  ];
-
-  const hostResponseTimes = ["Fast", "Moderate", "Slow"];
-
-  const neighbourhoodOptions = ['Roxbury', 'Beacon Hill', 'Dorchester', 'Charlestown', 'Jamaica Plain',
-    'North End', 'South Boston', 'Back Bay', 'Roslindale', 'Downtown Crossing',
-    'South End', 'Government Center', 'West End', 'Allston-Brighton',
-    'Fenway/Kenmore', 'Hyde Park', 'West Roxbury', 'East Boston', 'Mattapan',
-    'Leather District', 'Mission Hill', 'Chinatown', 'Theater District',
-    'Cape Neddick', 'Cambridge', 'Downtown', 'Chestnut Hill', 'Back Bay West',
-    'Brighton', 'Harwich Port', 'Spring Hill', 'Brookline', 'East Downtown',
-    'Lower Allston', 'Prudential / St. Botolph', 'D Street / West Broadway',
-    'Bay Village', 'Boston Theater District', 'Eagle Hill', 'Jeffries Point',
-    'Fenway–Kenmore', 'Allston', 'Stony Brook / Cleary Square',
-    'Columbus Park / Andrew Square', 'Codman Square', 'Central City',
-    "St. Elizabeth's", 'Harvard Square', 'Franklin Field South', 'Brewster',
-    'City Point', 'Cedar Grove', 'West Fens', 'Fisher Hill', 'Rockport',
-    'East Falmouth', 'Orient Heights', 'Franklin Field North', 'Ward Two',
-    'Southern Mattapan', 'Metropolitan Hill / Beech Street',
-    'Harbor View / Orient Heights', 'Sun Bay South', 'Newton', 'Wellington Hill',
-    'Brook Farm', 'South Sanford', 'Dorchester Center', 'Commonwealth',
-    'Medford Street / The Neck', 'West Street / River Street',
-    'Lower Washington / Mount Hope', 'South Medford', 'Vineyard Haven',
-    'Fairmount Hill', 'South Beach', 'Uplands'];
 
   // Function to handle price calculation
   const handleSearch = async () => {
@@ -302,21 +263,21 @@ export default function Home() {
     <RootLayout>
       <main className="flex min-h-screen flex-col items-center p-6 bg-gray-50">
         {/* Header section */}
-        <header className="w-full flex justify-between items-center mb-8 h-12">
-          <h1 className="text-3xl font-bold text-blue-600">Airbnb Price Prediction</h1>
-          <div className="flex items-center">
+        <Nav />
+        <header className="w-full flex justify-between items-center mb-10">
+          <div className="flex flex-col md:flex-row items-center w-full justify-between">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4 md:mb-0">Airbnb Price Prediction</h1>
             <input
               placeholder="Enter server address..."
               value={serverAddress}
               onChange={(e) => setServerAddress(e.target.value)}
-              className="px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full md:w-auto px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-[36px] flex items-center shadow-sm"
             />
           </div>
         </header>
-        <Nav />
         {/* Alert message */}
         {showAlert && (
-          <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow-lg">
+          <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
             {alertMessage}
           </div>
         )}
@@ -325,15 +286,15 @@ export default function Home() {
         <div className="flex flex-col md:flex-row w-full gap-8 mb-8">
           {/* Input parameters section */}
           <div className="w-full md:w-1/2">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-2xl font-bold mb-4">Input Parameters</h2>
-              <div className="grid grid-cols-1 gap-4">
+            <div className="bg-white p-8 rounded-2xl shadow-lg">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Input Parameters</h2>
+              <div className="grid grid-cols-1 gap-6">
                 <div>
-                  <label className="block text-base font-medium text-gray-700 mb-[6px]">Host Neighbourhood</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Host Neighbourhood</label>
                   <select
                     value={hostNeighbourhood}
                     onChange={(e) => setHostNeighbourhood(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white shadow-sm"
                   >
                     <option value="">Select host neighbourhood</option>
                     {neighbourhoodOptions.map((neighbourhood) => (
@@ -343,7 +304,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={openModal}
-                  className="w-full mt-4 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full mt-4 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-150 ease-in-out"
                 >
                   Fill Other Parameters
                 </button>
@@ -353,17 +314,17 @@ export default function Home() {
 
           {/* Prediction result section */}
           <div className="w-full md:w-1/2">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-2xl font-bold">Estimated Price</h2>
+            <div className="bg-white p-8 rounded-2xl shadow-lg">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-6">Estimated Price</h2>
               <div className="text-center">
-                <p className="text-5xl font-bold text-blue-600 mt-8 mb-8">
+                <p className="text-6xl font-bold text-blue-600 mt-8 mb-8">
                   {isLoading ? 'Calculating...' : (price !== null ? `$${price.toFixed(2)}` : '???')}
                 </p>
               </div>
               <button
                 onClick={handleSearch}
                 disabled={isLoading || !hostNeighbourhood || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews}
-                className={`w-full mt-4 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${(isLoading || !hostNeighbourhood || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`w-full mt-4 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-150 ease-in-out ${(isLoading || !hostNeighbourhood || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews) ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {isLoading ? 'Calculating...' : 'Calculate Price'}
               </button>
@@ -372,55 +333,29 @@ export default function Home() {
         </div>
 
         {/* Map component */}
-
-        {apiKey ? (
-          <APIProvider
-            apiKey={apiKey}
-            language='en'
-            onLoad={() => console.log('Google Maps API loaded.')}
-          >
-            <div className="w-full h-[500px] mb-8">
-              <Map
-                mapId={mapId}
-                defaultZoom={11}
-                defaultCenter={{ lat: 42.3601, lng: -71.0589 }}
-                onClick={handleMapClick}
-              >
-                {/* {selectedLocation && (
-                  <AdvancedMarker position={selectedLocation} />
-                )} */}
-                {neighbourhoodsLatLng.map((position, index) => (
-                  <AdvancedMarker
-                    key={index}
-                    position={position}
-                  />
-                ))}
-              </Map>
-            </div>
-          </APIProvider>
-        ) : (
-          <div className="w-full h-[500px] mb-8 flex items-center justify-center bg-gray-100">
-            <p className="text-xl text-gray-600">Loading map...</p>
-          </div>
-        )}
+        <MapComponent
+          apiKey={apiKey}
+          mapId={mapId}
+          selectedLocation={selectedLocation}
+          neighbourhoodsLatLng={neighbourhoodsLatLng}
+          handleMapClick={handleMapClick}
+        />
 
         {/* Footer */}
-        <footer className="mt-12 text-center text-gray-500">
-          <p>&copy; 2024 Airbnb Price Prediction. All rights reserved.</p>
-        </footer>
+        <Footer />
 
         {/* Modal for additional parameters */}
         {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
-            <div className="bg-white p-8 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <h3 className="text-2xl font-bold mb-6">Other Parameters</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4 z-50">
+            <div className="bg-white p-8 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-xl">
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Other Parameters</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Property Type</label>
                   <select
                     value={propertyType}
                     onChange={(e) => setPropertyType(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-sm"
                   >
                     <option value="">Select property type</option>
                     {propertyTypes.map((type) => (
@@ -429,11 +364,11 @@ export default function Home() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Room Type</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Room Type</label>
                   <select
                     value={roomType}
                     onChange={(e) => setRoomType(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-sm"
                   >
                     <option value="">Select room type</option>
                     {roomTypes.map((type) => (
@@ -442,71 +377,71 @@ export default function Home() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Accommodates</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Accommodates</label>
                   <input
                     type="text"
                     value={accommodates}
                     onChange={handleAccommodatesChange}
                     placeholder="Enter number of guests"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Bedrooms</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Bedrooms</label>
                   <input
                     type="text"
                     value={bedrooms}
                     onChange={handleBedroomsChange}
                     placeholder="Enter number of bedrooms"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Number of Beds</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Number of Beds</label>
                   <input
                     type="text"
                     value={bedCount}
                     onChange={handleBedCountChange}
                     placeholder="Enter number of beds"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Bathrooms</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Bathrooms</label>
                   <input
                     type="text"
                     value={bathrooms}
                     onChange={handleBathroomsChange}
                     placeholder="Enter number of bathrooms"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Minimum Nights</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Minimum Nights</label>
                   <input
                     type="text"
                     value={minimumNights}
                     onChange={handleMinimumNightsChange}
                     placeholder="Enter minimum nights"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Maximum Nights</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Maximum Nights</label>
                   <input
                     type="text"
                     value={maximumNights}
                     onChange={handleMaximumNightsChange}
                     placeholder="Enter maximum nights"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Host Response Time</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Host Response Time</label>
                   <select
                     value={hostResponseTime}
                     onChange={(e) => setHostResponseTime(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white text-sm"
                   >
                     <option value="">Select host response time</option>
                     {hostResponseTimes.map((time) => (
@@ -514,8 +449,8 @@ export default function Home() {
                     ))}
                   </select>
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Host Response Rate <span className="text-blue-500 ml-2">{hostResponseRate}%</span>
                   </label>
                   <input
@@ -527,8 +462,8 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Host Acceptance Rate <span className="text-blue-500 ml-2">{hostAcceptanceRate}%</span>
                   </label>
                   <input
@@ -540,7 +475,7 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                   <label className="flex items-center text-sm font-medium text-gray-700">
                     <input
                       type="checkbox"
@@ -551,7 +486,7 @@ export default function Home() {
                     Host Identity Verified
                   </label>
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                   <label className="flex items-center text-sm font-medium text-gray-700">
                     <input
                       type="checkbox"
@@ -563,17 +498,17 @@ export default function Home() {
                   </label>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Number of Reviews</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Number of Reviews</label>
                   <input
                     type="text"
                     value={numberOfReviews}
                     onChange={handleNumberOfReviewsChange}
                     placeholder="Enter number of reviews"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Review Scores Rating <span className="text-blue-500 ml-2">{reviewScoresRating.toFixed(2)}</span>
                   </label>
                   <input
@@ -586,8 +521,8 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Review Scores Accuracy <span className="text-blue-500 ml-2">{reviewScoresAccuracy.toFixed(2)}</span>
                   </label>
                   <input
@@ -600,8 +535,8 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Review Scores Cleanliness <span className="text-blue-500 ml-2">{reviewScoresCleanliness.toFixed(2)}</span>
                   </label>
                   <input
@@ -614,8 +549,8 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Review Scores Checkin <span className="text-blue-500 ml-2">{reviewScoresCheckin.toFixed(2)}</span>
                   </label>
                   <input
@@ -628,8 +563,8 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Review Scores Communication <span className="text-blue-500 ml-2">{reviewScoresCommunication.toFixed(2)}</span>
                   </label>
                   <input
@@ -642,8 +577,8 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Review Scores Location <span className="text-blue-500 ml-2">{reviewScoresLocation.toFixed(2)}</span>
                   </label>
                   <input
@@ -656,8 +591,8 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                     Review Scores Value <span className="text-blue-500 ml-2">{reviewScoresValue.toFixed(2)}</span>
                   </label>
                   <input
@@ -673,7 +608,7 @@ export default function Home() {
               </div>
               <button
                 onClick={closeModal}
-                className="w-full mt-6 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full mt-8 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-150 ease-in-out"
               >
                 Confirm
               </button>
