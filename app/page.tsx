@@ -10,7 +10,7 @@ import MapComponent from '@/components/MapComponent';
 
 export default function Home() {
   // State variables for managing UI and data
-  const [serverAddress, setServerAddress] = useState(process.env.NEXT_PUBLIC_SERVER_ADDRESS || '');
+  const [serverAddress, setServerAddress] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -63,6 +63,15 @@ export default function Home() {
       })
       .catch(error => console.error('Error fetching API key:', error))
   }, [])
+
+  useEffect(() => {
+    fetch('/api/server-address')
+      .then(response => response.json())
+      .then(data => {
+        setServerAddress(data.serverAddress);
+      })
+      .catch(error => console.error('Error fetching server address:', error));
+  }, []);
 
   // Function to handle price calculation
   const handleSearch = async () => {
@@ -285,12 +294,12 @@ export default function Home() {
         <header className="w-full flex justify-between items-center mb-10">
           <div className="flex flex-col md:flex-row items-center w-full justify-between">
             <h1 className="text-4xl font-bold text-gray-900 mb-4 md:mb-0">Airbnb Price Prediction</h1>
-            <input
+            {/* <input
               placeholder="Enter server address..."
               value={serverAddress}
               onChange={(e) => setServerAddress(e.target.value)}
               className="w-full md:w-auto px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-[36px] flex items-center shadow-sm"
-            />
+            /> */}
           </div>
         </header>
         {/* Alert message */}
