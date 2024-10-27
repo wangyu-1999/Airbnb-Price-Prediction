@@ -44,6 +44,10 @@ export default function Home() {
   const [reviewScoresValue, setReviewScoresValue] = useState(2.5);
   const [neighbourhoods, setNeighbourhoods] = useState<[number, number][]>([]);
   const [neighbourhoodsLatLng, setNeighbourhoodsLatLng] = useState<{ lat: number, lng: number }[]>([]);
+  const [numberOfReviewsL30d, setNumberOfReviewsL30d] = useState('');
+  const [instantBookable, setInstantBookable] = useState(false);
+  const [havingLicense, setHavingLicense] = useState(false);
+
   useEffect(() => {
     const convertToLatLng = (coordinates: [number, number][]) => {
       return coordinates.map(([lng, lat]) => ({ lat, lng }));
@@ -109,29 +113,31 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          location: selectedLocation,
-          propertyType,
-          roomType,
-          bedCount: parseInt(bedCount),
-          hostResponseTime,
-          hostResponseRate: hostResponseRate / 100,
-          hostAcceptanceRate: hostAcceptanceRate / 100,
-          hostNeighbourhood,
-          hostIdentityVerified: hostIdentityVerified,
-          superhost: superhost,
-          accommodates: parseInt(accommodates),
-          bathrooms: parseFloat(bathrooms),
-          bedrooms: parseInt(bedrooms),
-          minimumNights: parseInt(minimumNights),
-          maximumNights: parseInt(maximumNights),
-          numberOfReviews: parseInt(numberOfReviews),
-          reviewScoresRating,
-          reviewScoresAccuracy,
-          reviewScoresCleanliness,
-          reviewScoresCheckin,
-          reviewScoresCommunication,
-          reviewScoresLocation,
-          reviewScoresValue
+          Host_response_time: hostResponseTime,
+          Host_response_rate: hostResponseRate / 100,
+          Host_acceptance_rate: hostAcceptanceRate / 100,
+          Host_is_superhost: superhost,
+          Host_neighbourhood: hostNeighbourhood,
+          Host_identity_verified: hostIdentityVerified,
+          Property_type: propertyType,
+          Room_type: roomType,
+          Accommodates: parseInt(accommodates),
+          Bathrooms: parseFloat(bathrooms),
+          Bedrooms: parseInt(bedrooms),
+          Beds: parseInt(bedCount),
+          Minimum_nights: parseInt(minimumNights),
+          Maximum_nights: parseInt(maximumNights),
+          Number_of_reviews_ltm: parseInt(numberOfReviews),
+          Number_of_reviews_l30d: parseInt(numberOfReviewsL30d),
+          Review_scores_rating: reviewScoresRating,
+          Review_scores_accuracy: reviewScoresAccuracy,
+          Review_scores_cleanliness: reviewScoresCleanliness,
+          Review_scores_checkin: reviewScoresCheckin,
+          Review_scores_communication: reviewScoresCommunication,
+          Review_scores_location: reviewScoresLocation,
+          Review_scores_value: reviewScoresValue,
+          Instant_bookable: instantBookable,
+          Having_License: havingLicense
         }),
       });
 
@@ -249,6 +255,18 @@ export default function Home() {
     }
   };
 
+  // Function to handle number of reviews in last 30 days input
+  const handleNumberOfReviewsL30dChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === '' || /^\d+$/.test(value)) {
+      setNumberOfReviewsL30d(value);
+    } else {
+      setShowAlert(true);
+      setAlertMessage('Please enter a valid integer');
+      setTimeout(() => setShowAlert(false), 3000);
+    }
+  };
+
   // Modal control functions
   const openModal = () => {
     setShowModal(true);
@@ -323,8 +341,8 @@ export default function Home() {
               </div>
               <button
                 onClick={handleSearch}
-                disabled={isLoading || !hostNeighbourhood || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews}
-                className={`w-full mt-4 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-150 ease-in-out ${(isLoading || !hostNeighbourhood || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isLoading || !hostNeighbourhood || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews || !numberOfReviewsL30d}
+                className={`w-full mt-4 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition duration-150 ease-in-out ${(isLoading || !hostNeighbourhood || !propertyType || !roomType || !bedCount || !hostResponseTime || !accommodates || !bathrooms || !bedrooms || !minimumNights || !maximumNights || !numberOfReviews || !numberOfReviewsL30d) ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {isLoading ? 'Calculating...' : 'Calculate Price'}
               </button>
@@ -506,6 +524,38 @@ export default function Home() {
                     placeholder="Enter number of reviews"
                     className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">Number of Reviews (Last 30 Days)</label>
+                  <input
+                    type="text"
+                    value={numberOfReviewsL30d}
+                    onChange={handleNumberOfReviewsL30dChange}
+                    placeholder="Enter number of reviews in last 30 days"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  />
+                </div>
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="flex items-center text-sm font-medium text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={instantBookable}
+                      onChange={(e) => setInstantBookable(e.target.checked)}
+                      className="mr-2"
+                    />
+                    Instant Bookable
+                  </label>
+                </div>
+                <div className="col-span-1 sm:col-span-2">
+                  <label className="flex items-center text-sm font-medium text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={havingLicense}
+                      onChange={(e) => setHavingLicense(e.target.checked)}
+                      className="mr-2"
+                    />
+                    Having License
+                  </label>
                 </div>
                 <div className="col-span-1 sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2">
