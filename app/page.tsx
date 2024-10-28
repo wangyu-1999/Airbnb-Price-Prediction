@@ -305,7 +305,18 @@ export default function Home() {
           </div>
         </header> */}
         <Header />
-        <p className="text-sm text-gray-500 mb-4">Note: The first request may take longer (about 50 seconds) as the free server wakes up from sleep mode. Subsequent requests will be faster.</p>
+        <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-2">How to Use:</h3>
+          <ol className="list-decimal list-inside space-y-2 text-gray-600">
+            <li>Select a Host Neighbourhood from the dropdown menu below</li>
+            <li>Click "Fill Other Parameters" to open the parameter form</li>
+            <li>Fill in all parameters in the form</li>
+            <li>Click "Confirm" to save the parameters</li>
+            <li>Click "Calculate Price" to get your price prediction</li>
+          </ol>
+          <p className="mt-2 text-sm text-gray-500">Note: All parameters must be filled before calculation can proceed. The "Calculate Price" button will remain disabled until all parameters are provided.</p>
+          <p className="mt-2 text-sm text-red-500 font-medium">Important: The first request may take longer (about 50 seconds) as the free server wakes up from sleep mode. Subsequent requests will be faster.</p>
+        </div>
         {/* Alert message */}
         {showAlert && (
           <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
