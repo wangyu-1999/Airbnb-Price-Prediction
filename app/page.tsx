@@ -309,13 +309,13 @@ export default function Home() {
           <h3 className="text-lg font-medium text-gray-900 mb-2">How to Use:</h3>
           <ol className="list-decimal list-inside space-y-2 text-gray-600">
             <li>Select a Host Neighbourhood from the dropdown menu below</li>
-            <li>Click "Fill Other Parameters" to open the parameter form</li>
+            <li>Click &quot;Fill Other Parameters&quot; to open the parameter form</li>
             <li>Fill in all parameters in the form</li>
-            <li>Click "Confirm" to save the parameters</li>
-            <li>Click "Calculate Price" to get your price prediction</li>
+            <li>Click &quot;Confirm&quot; to save the parameters</li>
+            <li>Click &quot;Calculate Price&quot; to get your price prediction</li>
           </ol>
-          <p className="mt-2 text-sm text-gray-500">Note: All parameters must be filled before calculation can proceed. The "Calculate Price" button will remain disabled until all parameters are provided.</p>
-          <p className="mt-2 text-sm text-red-500 font-medium">Important: The first request may take longer (about 50 seconds) as the free server wakes up from sleep mode. Subsequent requests will be faster.</p>
+          <p className="mt-2 text-sm text-gray-500">Note: All parameters must be filled before calculation can proceed. The &quot;Calculate Price&quot; button will remain disabled until all parameters are provided.</p>
+          <p className="mt-2 text-sm text-red-500 font-medium">Important: The first request may take longer (about 50 seconds) as the free server wakes up from sleep mode. Subsequent requests will be faster (about 1 second).</p>
         </div>
         {/* Alert message */}
         {showAlert && (
